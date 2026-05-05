@@ -4,22 +4,23 @@ import Scene = Phaser.Scene
 import Grid = Phaser.GameObjects.Grid;
 import Rectangle = Phaser.GameObjects.Rectangle;
 
+import { Animal } from '../logic/Animal';
+
 export class MainGame extends Scene
 {
     static readonly CAMERA_ZOOM : number = 10;
     static readonly ANIMAL_SIZE : number = 1;
 
-    static readonly CARNIVORE_LINEAR_SPEED : number = 5;
-    static readonly CARNIVORE_ANGULAR_SPEED : number = 1;
+    static readonly CARNIVORE_RUN_SPEED : number = 5;
+    static readonly CARNIVORE_TURN_SPEED : number = 1;
 
-    static readonly HERBIVORE_LINEAR_SPEED : number = 4;
-    static readonly HERBIVORE_ANGULAR_SPEED : number = 10;
+    static readonly HERBIVORE_RUN_SPEED : number = 4;
+    static readonly HERBIVORE_TURN_SPEED : number = 10;
 
     grid : Grid;
 
-    carnivore : Rectangle;
-
-    herbivore : Rectangle;
+    carnivore : Animal;
+    herbivore : Animal;
     herbivoreZigZag : number;
 
     constructor()
@@ -36,58 +37,50 @@ export class MainGame extends Scene
         this.grid = this.add.grid(0, 0, 10000, 10000, 10, 10);
         this.grid.setStrokeStyle(0.05);
 
-        this.carnivore = this.add.rectangle(
-            0,
-            -10,
-            MainGame.ANIMAL_SIZE * 2,
-            MainGame.ANIMAL_SIZE,
-            0xDECC9C);
+        this.carnivore = new Animal(
+            this.add.rectangle(
+                0,
+                -10,
+                MainGame.ANIMAL_SIZE * 2,
+                MainGame.ANIMAL_SIZE,
+                0xDECC9C),
+            MainGame.CARNIVORE_RUN_SPEED,
+            MainGame.CARNIVORE_TURN_SPEED);
+            
+        this.carnivore.gameObject.setRotation(this.toRadians(90));
 
-        this.carnivore.setRotation(this.toRadians(90));
-
-        this.herbivore = this.add.rectangle(
-            0,
-            10,
-            MainGame.ANIMAL_SIZE * 2,
-            MainGame.ANIMAL_SIZE,
-            0xBA8759);
+        this.herbivore = new Animal(
+            this.add.rectangle(
+                0,
+                10,
+                MainGame.ANIMAL_SIZE * 2,
+                MainGame.ANIMAL_SIZE,
+                0xBA8759),
+            MainGame.HERBIVORE_RUN_SPEED,
+            MainGame.HERBIVORE_TURN_SPEED);
         
-        this.herbivore.setRotation(this.toRadians(90));
+        this.herbivore.gameObject.setRotation(this.toRadians(90));
         this.herbivoreZigZag = 0;
 
-        this.cameras.main.startFollow(this.carnivore);
+        this.cameras.main.startFollow(this.carnivore.gameObject);
     };
 
     update(_time: number, deltaTimeMs: number)
     {
-        let carnToHerbRelativeDirection = Phaser.Math.Angle.BetweenPoints(
-            this.carnivore.getCenter(),
-            this.herbivore.getCenter());
+        let carnToHerbRelativeDirection = Phaser.Math.Angle.Between(
+            this.carnivore.gameObject.x,
+            this.carnivore.gameObject.y,
+            this.herbivore.gameObject.x,
+            this.herbivore.gameObject.y);
 
         this.herbivoreZigZag += this.getIncrement(this.toRadians(45), deltaTimeMs);
         let herbDesiredDirection = carnToHerbRelativeDirection + Math.sin(this.herbivoreZigZag);
 
-        this.changeDirection(
-            this.herbivore,
-            herbDesiredDirection,
-            MainGame.HERBIVORE_ANGULAR_SPEED,
-            deltaTimeMs);
+        this.herbivore.turn(herbDesiredDirection, deltaTimeMs);
+        this.herbivore.run(deltaTimeMs);
 
-        this.move(
-            this.herbivore,
-            MainGame.HERBIVORE_LINEAR_SPEED,
-            deltaTimeMs);
-        
-        this.changeDirection(
-            this.carnivore,
-            carnToHerbRelativeDirection,
-            MainGame.CARNIVORE_ANGULAR_SPEED,
-            deltaTimeMs);
-
-        this.move(
-            this.carnivore,
-            MainGame.CARNIVORE_LINEAR_SPEED,
-            deltaTimeMs);
+        this.carnivore.turn(carnToHerbRelativeDirection, deltaTimeMs);
+        this.carnivore.run(deltaTimeMs);        
     }
 
     changeDirection(
