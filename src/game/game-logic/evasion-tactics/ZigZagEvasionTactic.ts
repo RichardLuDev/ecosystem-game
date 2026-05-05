@@ -1,3 +1,4 @@
+import { MathUtils } from "../../math/MathUtils";
 import { IEvasionTactic } from "./IEvasionTactic";
 
 export class ZigZagEvasionTactic implements IEvasionTactic
@@ -26,18 +27,12 @@ export class ZigZagEvasionTactic implements IEvasionTactic
             this.currentDirectionElaspedMs = 0;
         }
 
-        return this.capRadians(threatDirection + Math.PI + this.currentDirectionOffset);
+        return MathUtils.normalizeRadians(threatDirection + Math.PI + this.currentDirectionOffset);
     }
     
     private getRandomDirection(maxDirectionOffset: number ): number
     {
         let minDirectionOffset = -maxDirectionOffset;
         return Math.random() * (maxDirectionOffset - minDirectionOffset) + minDirectionOffset;
-    }
-
-    private capRadians(radians: number): number
-    {
-        const PI = Math.PI;
-        return ((radians + PI) % (2 * PI) + 2 * PI) % (2 * PI) - PI;
     }
 }

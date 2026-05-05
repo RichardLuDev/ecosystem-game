@@ -2,26 +2,23 @@ import * as Phaser from 'phaser';
 
 import Scene = Phaser.Scene
 import Grid = Phaser.GameObjects.Grid;
-import Rectangle = Phaser.GameObjects.Rectangle;
 
-import { Animal } from '../logic/Animal';
-import { ZigZagEvasionTactic } from '../logic/evasionTactics/ZigZagEvasionTactic';
+import { Animal } from '../game-logic/Animal';
+import { AnimalFactory } from '../game-logic/AnimalFactory';
+import { RandomUtils } from '../math/RandomUtils';
 
 export class MainGame extends Scene
 {
-    static readonly CAMERA_ZOOM : number = 10;
-    static readonly ANIMAL_SIZE : number = 1;
+    private static readonly CAMERA_ZOOM : number = 3;
+    
+    private static readonly CARNIVORE_COUNT = 10;
+    private static readonly HERBIVORE_COUNT = 10;
+    private static readonly SPAWN_BOUNDS = 50;
 
-    static readonly CARNIVORE_RUN_SPEED : number = 5;
-    static readonly CARNIVORE_TURN_SPEED : number = 1;
-
-    static readonly HERBIVORE_RUN_SPEED : number = 5;
-    static readonly HERBIVORE_TURN_SPEED : number = 5;
+    private animalFactory : AnimalFactory;
 
     grid : Grid;
-
-    carnivore : Animal;
-    herbivore : Animal;
+    animals : Animal[];
 
     constructor()
     {
@@ -34,65 +31,35 @@ export class MainGame extends Scene
         this.cameras.main.centerOn(0, 0);
         this.cameras.main.setBackgroundColor(0x136d15);
 
+        this.animalFactory = new AnimalFactory(this.add);
+
         this.grid = this.add.grid(0, 0, 10000, 10000, 10, 10);
         this.grid.setStrokeStyle(0.05);
 
-        this.carnivore = new Animal(
-            this.add.rectangle(
-                0,
-                -10,
-                MainGame.ANIMAL_SIZE * 2,
-                MainGame.ANIMAL_SIZE,
-                0xDECC9C),
-            new ZigZagEvasionTactic(
-                3000,
-                Math.PI / 2),
-            MainGame.CARNIVORE_RUN_SPEED,
-            MainGame.CARNIVORE_TURN_SPEED);
-            
-        this.carnivore.gameObject.setRotation(this.toRadians(90));
+        this.animals = [];
 
-        this.herbivore = new Animal(
-            this.add.rectangle(
-                0,
-                10,
-                MainGame.ANIMAL_SIZE * 2,
-                MainGame.ANIMAL_SIZE,
-                0xBA8759),
-            new ZigZagEvasionTactic(
-                3000,
-                Math.PI / 2),
-            MainGame.HERBIVORE_RUN_SPEED,
-            MainGame.HERBIVORE_TURN_SPEED);
-        
-        this.herbivore.gameObject.setRotation(this.toRadians(90));
+        for(let i = 0; i < MainGame.CARNIVORE_COUNT; i++)
+        {
+            this.animals.push(this.animalFactory.createCarnivore(
+                RandomUtils.randomBetween(-MainGame.SPAWN_BOUNDS, MainGame.SPAWN_BOUNDS),
+                RandomUtils.randomBetween(-MainGame.SPAWN_BOUNDS, MainGame.SPAWN_BOUNDS),
+                RandomUtils.randomBetween(-Math.PI, Math.PI)));
+        }
 
-        this.cameras.main.startFollow(this.carnivore.gameObject);
+        for(let i = 0; i < MainGame.HERBIVORE_COUNT; i++)
+        {
+            this.animals.push(this.animalFactory.createHerbivore(
+                RandomUtils.randomBetween(-MainGame.SPAWN_BOUNDS, MainGame.SPAWN_BOUNDS),
+                RandomUtils.randomBetween(-MainGame.SPAWN_BOUNDS, MainGame.SPAWN_BOUNDS),
+                RandomUtils.randomBetween(-Math.PI, Math.PI)));
+        }
     };
 
     update(_time: number, deltaTimeMs: number)
     {
-        let carnToHerbRelativeDirection = Phaser.Math.Angle.Between(
-            this.carnivore.gameObject.x,
-            this.carnivore.gameObject.y,
-            this.herbivore.gameObject.x,
-            this.herbivore.gameObject.y);
-        
-        this.herbivore.setThreatDirection(this.capRadians(carnToHerbRelativeDirection + Math.PI));
-        this.carnivore.setFoodDirection(carnToHerbRelativeDirection);
-
-        this.herbivore.update(deltaTimeMs);
-        this.carnivore.update(deltaTimeMs);       
-    }
-
-    toRadians(degrees: number) : number
-    {
-        return degrees * Math.PI / 180;
-    }
-
-    capRadians(radians: number): number
-    {
-        const PI = Math.PI;
-        return ((radians + PI) % (2 * PI) + 2 * PI) % (2 * PI) - PI;
+        this.animals.forEach((animal: Animal) =>
+        {
+            animal.update(deltaTimeMs);
+        });      
     }
 }

@@ -1,8 +1,11 @@
-import { IEvasionTactic } from "./evasionTactics/IEvasionTactic";
-import { IGameObject } from "./IGameObject";
+import { MathUtils } from "../math/MathUtils";
+import { AnimalType } from "./AnimalType";
+import { IEvasionTactic } from "./evasion-tactics/IEvasionTactic";
+import { IGameObject } from "./engine-abstractions/IGameObject";
 
 export class Animal
 {
+    readonly animalType: AnimalType;
     readonly gameObject: IGameObject;
     readonly evasionTactic: IEvasionTactic
     readonly runSpeed: number;
@@ -12,11 +15,13 @@ export class Animal
     foodDirection: number | null;
 
     constructor(
+        animalType: AnimalType,
         gameObject: IGameObject,
         evasionTactic: IEvasionTactic,
         runSpeed: number,
         turnSpeed: number)
     {
+        this.animalType = animalType;
         this.gameObject = gameObject;
         this.evasionTactic = evasionTactic;
         this.runSpeed = runSpeed;
@@ -64,7 +69,7 @@ export class Animal
             return;
 
         let deltaAngle = desiredDirection - this.gameObject.rotation;
-        let maxRotation = Animal.getIncrement(this.turnSpeed, deltaTimeMs);
+        let maxRotation = MathUtils.integrate(this.turnSpeed, deltaTimeMs);
 
         if (Math.abs(deltaAngle) <= maxRotation)
         {
@@ -78,15 +83,10 @@ export class Animal
     
     private run(deltaTimeMs: number)
     {
-        let increment = Animal.getIncrement(this.runSpeed, deltaTimeMs);
+        let increment = MathUtils.integrate(this.runSpeed, deltaTimeMs);
 
         this.gameObject.setPosition(
             this.gameObject.x += Math.cos(this.gameObject.rotation) * increment,
             this.gameObject.y += Math.sin(this.gameObject.rotation) * increment);
-    }
-
-    private static getIncrement(velocity: number, deltaTimeMs: number) : number
-    {
-        return velocity * deltaTimeMs / 1000;
     }
 }
