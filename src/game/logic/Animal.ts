@@ -1,29 +1,29 @@
+import { IEvasionTactic } from "./evasionTactics/IEvasionTactic";
 import { IGameObject } from "./IGameObject";
 
 export class Animal
 {
     readonly gameObject: IGameObject;
+    readonly evasionTactic: IEvasionTactic
     readonly runSpeed: number;
     readonly turnSpeed: number;
 
     threatDirection: number | null;
     foodDirection: number | null;
 
-    evationDirectionOffset: number;
-
     constructor(
         gameObject: IGameObject,
+        evasionTactic: IEvasionTactic,
         runSpeed: number,
         turnSpeed: number)
     {
         this.gameObject = gameObject;
+        this.evasionTactic = evasionTactic;
         this.runSpeed = runSpeed;
         this.turnSpeed = turnSpeed;
 
         this.threatDirection = null;
         this.foodDirection = null;
-
-        this.evationDirectionOffset = 0;
     }
 
     setThreatDirection(threatDirection: number | null)
@@ -38,26 +38,31 @@ export class Animal
 
     update(deltaTimeMs: number)
     {
+        let runDirection = this.determineRunDirection(deltaTimeMs);
+        this.turn(runDirection, deltaTimeMs);
+        this.run(deltaTimeMs);
+    }
+
+    private determineRunDirection(deltaTimeMs: number): number | null
+    {
         let targetDirection: number | null = null;
         if (this.threatDirection != null)
         {
-            this.evationDirectionOffset += Animal.getIncrement(Animal.toRadians(45), deltaTimeMs);
-            targetDirection = Animal.capRadians(this.threatDirection + Math.PI + this.evationDirectionOffset);
+            targetDirection = this.evasionTactic.evasionDirection(this.threatDirection, deltaTimeMs);
         }
         else if (this.foodDirection != null)
         {
             targetDirection = this.foodDirection;
         }
 
-        if (targetDirection != null)
-        {
-            this.turn(targetDirection, deltaTimeMs);
-            this.run(deltaTimeMs);
-        }
+        return targetDirection;
     }
 
-    private turn(desiredDirection: number, deltaTimeMs: number)
+    private turn(desiredDirection: number | null, deltaTimeMs: number)
     {
+        if (desiredDirection == null)
+            return;
+
         let deltaAngle = desiredDirection - this.gameObject.rotation;
         let maxRotation = Animal.getIncrement(this.turnSpeed, deltaTimeMs);
 
@@ -83,16 +88,5 @@ export class Animal
     private static getIncrement(velocity: number, deltaTimeMs: number) : number
     {
         return velocity * deltaTimeMs / 1000;
-    }
-
-    private static toRadians(degrees: number) : number
-    {
-        return degrees * Math.PI / 180;
-    }
-
-    private static capRadians(radians: number): number
-    {
-        const PI = Math.PI;
-        return ((radians + PI) % (2 * PI) + 2 * PI) % (2 * PI) - PI;
     }
 }

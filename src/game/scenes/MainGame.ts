@@ -5,6 +5,7 @@ import Grid = Phaser.GameObjects.Grid;
 import Rectangle = Phaser.GameObjects.Rectangle;
 
 import { Animal } from '../logic/Animal';
+import { ZigZagEvasionTactic } from '../logic/evasionTactics/ZigZagEvasionTactic';
 
 export class MainGame extends Scene
 {
@@ -14,8 +15,8 @@ export class MainGame extends Scene
     static readonly CARNIVORE_RUN_SPEED : number = 5;
     static readonly CARNIVORE_TURN_SPEED : number = 1;
 
-    static readonly HERBIVORE_RUN_SPEED : number = 4;
-    static readonly HERBIVORE_TURN_SPEED : number = 10;
+    static readonly HERBIVORE_RUN_SPEED : number = 5;
+    static readonly HERBIVORE_TURN_SPEED : number = 5;
 
     grid : Grid;
 
@@ -43,6 +44,9 @@ export class MainGame extends Scene
                 MainGame.ANIMAL_SIZE * 2,
                 MainGame.ANIMAL_SIZE,
                 0xDECC9C),
+            new ZigZagEvasionTactic(
+                3000,
+                Math.PI / 2),
             MainGame.CARNIVORE_RUN_SPEED,
             MainGame.CARNIVORE_TURN_SPEED);
             
@@ -55,6 +59,9 @@ export class MainGame extends Scene
                 MainGame.ANIMAL_SIZE * 2,
                 MainGame.ANIMAL_SIZE,
                 0xBA8759),
+            new ZigZagEvasionTactic(
+                3000,
+                Math.PI / 2),
             MainGame.HERBIVORE_RUN_SPEED,
             MainGame.HERBIVORE_TURN_SPEED);
         
