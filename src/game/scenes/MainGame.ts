@@ -6,6 +6,7 @@ import Grid = Phaser.GameObjects.Grid;
 import { Animal } from '../game-logic/Animal';
 import { AnimalFactory } from '../game-logic/AnimalFactory';
 import { RandomUtils } from '../math/RandomUtils';
+import { SensorySystem } from '../game-logic/SensorySystem';
 
 export class MainGame extends Scene
 {
@@ -16,6 +17,7 @@ export class MainGame extends Scene
     private static readonly SPAWN_BOUNDS = 50;
 
     private animalFactory : AnimalFactory;
+    private sensorySystem : SensorySystem;
 
     grid : Grid;
     animals : Animal[];
@@ -32,6 +34,7 @@ export class MainGame extends Scene
         this.cameras.main.setBackgroundColor(0x136d15);
 
         this.animalFactory = new AnimalFactory(this.add);
+        this.sensorySystem = new SensorySystem();
 
         this.grid = this.add.grid(0, 0, 10000, 10000, 10, 10);
         this.grid.setStrokeStyle(0.05);
@@ -57,6 +60,8 @@ export class MainGame extends Scene
 
     update(_time: number, deltaTimeMs: number)
     {
+        this.sensorySystem.update(this.animals, deltaTimeMs);
+
         this.animals.forEach((animal: Animal) =>
         {
             animal.update(deltaTimeMs);

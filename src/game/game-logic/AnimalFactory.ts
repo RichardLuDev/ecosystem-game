@@ -29,7 +29,7 @@ export class AnimalFactory
     createCarnivore(x: number, y: number, rotation: number) : Animal
     {
         let carnivore = new Animal(
-            AnimalType.Herbivore,
+            AnimalType.Carnivore,
             this.gameObjectFactory.rectangle(
                 x,
                 y,
