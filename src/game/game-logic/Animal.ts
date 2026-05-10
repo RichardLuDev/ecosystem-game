@@ -1,13 +1,13 @@
 import { MathUtils } from "../math/MathUtils";
 import { AnimalType } from "./AnimalType";
-import { IEvasionTactic } from "./evasion-tactics/IEvasionTactic";
+import { IEvasionTacticComponent } from "./movement-tactics/IEvasionTacticComponent";
 import { IGameObject } from "./engine-abstractions/IGameObject";
 
 export class Animal
 {
     readonly animalType: AnimalType;
     readonly gameObject: IGameObject;
-    readonly evasionTactic: IEvasionTactic
+    readonly evasionTactic: IEvasionTacticComponent
     readonly runSpeed: number;
     readonly turnSpeed: number;
 
@@ -17,7 +17,7 @@ export class Animal
     constructor(
         animalType: AnimalType,
         gameObject: IGameObject,
-        evasionTactic: IEvasionTactic,
+        evasionTactic: IEvasionTacticComponent,
         runSpeed: number,
         turnSpeed: number)
     {

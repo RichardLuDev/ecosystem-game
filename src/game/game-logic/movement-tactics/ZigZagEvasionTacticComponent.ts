@@ -1,7 +1,7 @@
 import { MathUtils } from "../../math/MathUtils";
-import { IEvasionTactic } from "./IEvasionTactic";
+import { IEvasionTacticComponent } from "./IEvasionTacticComponent";
 
-export class ZigZagEvasionTactic implements IEvasionTactic
+export class ZigZagEvasionTacticComponent implements IEvasionTacticComponent
 {
     readonly changeDirectionIntervalMs: number;
     readonly maxDirectionOffset: number;

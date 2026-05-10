@@ -1,7 +1,7 @@
 import { Animal } from "./Animal";
 import { AnimalType } from "./AnimalType";
 import { IGameObjectFactory } from "./engine-abstractions/IGameObjectFactory";
-import { ZigZagEvasionTactic } from "./evasion-tactics/ZigZagEvasionTactic";
+import { ZigZagEvasionTacticComponent } from "./movement-tactics/ZigZagEvasionTacticComponent";
 
 export class AnimalFactory
 {
@@ -36,7 +36,7 @@ export class AnimalFactory
                 AnimalFactory.CARNIVORE_SIZE * 2,
                 AnimalFactory.CARNIVORE_SIZE,
                 AnimalFactory.CARNIVORE_COLOR),
-            new ZigZagEvasionTactic(
+            new ZigZagEvasionTacticComponent(
                 AnimalFactory.CARNIVORE_ZIG_ZAG_INTERVAL,
                 AnimalFactory.CARNIVORE_ZIG_ZAG),
             AnimalFactory.CARNIVORE_RUN_SPEED,
@@ -56,7 +56,7 @@ export class AnimalFactory
                 AnimalFactory.HERBIVORE_SIZE * 2,
                 AnimalFactory.HERBIVORE_SIZE,
                 AnimalFactory.HERBIVORE_COLOR),
-            new ZigZagEvasionTactic(
+            new ZigZagEvasionTacticComponent(
                 AnimalFactory.HERBIVORE_ZIG_ZAG_INTERVAL,
                 AnimalFactory.HERBIVORE_ZIG_ZAG),
             AnimalFactory.HERBIVORE_RUN_SPEED,

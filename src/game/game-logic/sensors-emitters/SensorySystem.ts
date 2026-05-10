@@ -1,7 +1,7 @@
 import * as Phaser from 'phaser';
 
-import { Animal } from "./Animal";
-import { AnimalType } from "./AnimalType";
+import { Animal } from "../Animal";
+import { AnimalType } from "../AnimalType";
 
 export class SensorySystem
 {
