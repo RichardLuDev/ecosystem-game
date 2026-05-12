@@ -6,17 +6,30 @@ import { SensedDataComponent } from "./sensors-emitters/SensedDataComponent";
 
 export class GameEntity
 {
-    //TODO: Use emitter for destoryed event.
+    //TODO: Use emitter for destroyed event.
+    private id: number  = -1;
 
     constructor(
-        public readonly id: number,
-        public readonly position: PositionComponent,
-        public readonly dynamics: DynamicsComponent,
-        public readonly animalCore: AnimalCoreComponent,
-        public readonly animalMovement: AnimalMovementComponent,
-        public readonly sensedData: SensedDataComponent,
+        public readonly label: string,
+        public readonly position: PositionComponent | null,
+        public readonly dynamics: DynamicsComponent | null,
+        public readonly animalCore: AnimalCoreComponent | null,
+        public readonly animalMovement: AnimalMovementComponent | null,
+        public readonly sensedData: SensedDataComponent | null,
         public isDestroyed: boolean = false)
     {
+    }
+
+    getID() : number
+    {
+        return this.id;
+    }
+
+    setID(id: number)
+    {
+        if (this.id != -1)
+            throw new Error("ID has already been assigned");
+        this.id = id;
     }
 
     destroy()

@@ -15,13 +15,12 @@ export class GameEntityFactory
     private static readonly HERBIVORE_TURN_SPEED : number = 5;
 
     createCarnivore(
-        id: number,
         x: number,
         y: number,
         rotation: number) : GameEntity
     {
         return new GameEntity(
-            id,
+            "carnivore",
             new PositionComponent(x, y, 0, rotation),
             new DynamicsComponent(),
             new AnimalCoreComponent(FoodType.Meat),
@@ -33,13 +32,12 @@ export class GameEntityFactory
     }
 
     createHerbivore(
-        id: number,
         x: number,
         y: number,
         rotation: number) : GameEntity
     {
         return new GameEntity(
-            id,
+            "herbivore",
             new PositionComponent(x, y, 0, rotation),
             new DynamicsComponent(),
             new AnimalCoreComponent(FoodType.Plant),
