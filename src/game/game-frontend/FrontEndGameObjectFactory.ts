@@ -37,8 +37,7 @@ export class FrontEndGameObjectFactory
             scene,
             sprite.width,
             sprite.height,
-            sprite.fillColor,
-            0);
+            sprite.fillColor);
 
         this.gameObjectFactory.existing(gameObject);
     }

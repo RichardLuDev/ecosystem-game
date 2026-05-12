@@ -10,8 +10,7 @@ export class FrontEndGameObject extends Phaser.GameObjects.Rectangle
         frontEndScene: Phaser.Scene,
         width: number,
         height: number,
-        fillColor: number,
-        fillAlpha: number)
+        fillColor: number)
     {
         super(
             frontEndScene,
@@ -20,7 +19,7 @@ export class FrontEndGameObject extends Phaser.GameObjects.Rectangle
             width,
             height,
             fillColor,
-            fillAlpha);
+            1);
 
         this.gameEntity = gameEntity;
     }
