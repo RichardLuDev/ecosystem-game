@@ -24,7 +24,7 @@ export class FrontEndGameObject extends Phaser.GameObjects.Rectangle
         this.gameEntity = gameEntity;
     }
 
-    update()
+    preUpdate(_time: number, _deltaTimeMs: number)
     {
         this.setPosition(
             this.gameEntity.position?.x,
