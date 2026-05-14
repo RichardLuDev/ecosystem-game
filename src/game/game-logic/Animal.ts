@@ -1,4 +1,4 @@
-import { MathUtils } from "../math/MathUtils";
+import { MathUtils } from "../utils/MathUtils";
 import { AnimalType } from "./AnimalType";
 import { IEvasionTacticComponent } from "./movement-tactics/IEvasionTacticComponent";
 import { IGameObject } from "./engine-abstractions/IGameObject";

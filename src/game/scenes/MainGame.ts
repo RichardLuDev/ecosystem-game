@@ -4,7 +4,7 @@ import Scene = Phaser.Scene;
 import Grid = Phaser.GameObjects.Grid;
 
 import { GameLogic } from '../game-logic/GameLogic';
-import { RandomUtils } from '../math/RandomUtils';
+import { RandomUtils } from '../utils/RandomUtils';
 import { FrontEndGameObjectFactory } from '../game-frontend/FrontEndGameObjectFactory';
 
 export class MainGame extends Scene

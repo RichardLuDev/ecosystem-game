@@ -1,4 +1,4 @@
-import { MathUtils } from "../../math/MathUtils";
+import { MathUtils } from "../../utils/MathUtils";
 import { IEvasionTacticComponent } from "./IEvasionTacticComponent";
 
 export class ZigZagEvasionTacticComponent implements IEvasionTacticComponent
