@@ -4,7 +4,7 @@ import { FoodType } from "./animal/FoodType";
 import { DynamicsComponent } from "./common/DynamicsComponent";
 import { PositionComponent } from "./common/PositionComponent";
 import { GameEntity } from "./GameEntity";
-import { SensedDataComponent } from "./sensors-emitters/SensedDataComponent";
+import { SensedDataComponent } from "./sensors-sources/SensedDataComponent";
 
 export class GameEntityFactory
 {

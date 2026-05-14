@@ -2,7 +2,7 @@ import { AnimalCoreComponent } from "./animal/AnimalCoreComponent";
 import { AnimalMovementComponent } from "./animal/AnimalMovementComponent";
 import { DynamicsComponent } from "./common/DynamicsComponent";
 import { PositionComponent } from "./common/PositionComponent";
-import { SensedDataComponent } from "./sensors-emitters/SensedDataComponent";
+import { SensedDataComponent } from "./sensors-sources/SensedDataComponent";
 
 export class GameEntity
 {

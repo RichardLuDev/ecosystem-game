@@ -24,6 +24,14 @@ export class GameLogic
 
     update(time: number, deltaTimeMs: number)
     {
+        for (const gameEntity of this.gameEntityContainer.getAllGameEntities())
+        {
+            if (gameEntity.position != null)
+            {
+                gameEntity.position.x += 0.1;
+                gameEntity.position.rotation += 0.1;
+            }
+        }
     }
 
     private getNextId() : number

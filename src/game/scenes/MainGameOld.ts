@@ -6,7 +6,7 @@ import Grid = Phaser.GameObjects.Grid;
 import { Animal } from '../game-logic/Animal';
 import { AnimalFactory } from '../game-logic/AnimalFactory';
 import { RandomUtils } from '../math/RandomUtils';
-import { SensorySystemOld } from '../game-logic/sensors-emitters/SensorySystemOld';
+import { SensorySystemOld } from '../game-logic/sensors-sources/SensorySystemOld';
 
 export class MainGameOld extends Scene
 {
